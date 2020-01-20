@@ -60,7 +60,7 @@ const DefaultBlockTypes = {
   },
 
   heading_open: function (item) {
-    var type = 'header-' + ({
+    const type = 'header-' + ({
       1: 'one',
       2: 'two',
       3: 'three',
@@ -102,7 +102,7 @@ const DefaultBlockStyles = {
 };
 
 // Key generator for entityMap items
-var idCounter = -1;
+let idCounter = -1;
 function generateUniqueKey() {
   idCounter++;
   return idCounter;
@@ -124,7 +124,7 @@ function generateUniqueKey() {
  *  blockStyleRanges: block-level representation of styles (eg strong, em)
 */
 function parseInline(inlineItem, BlockEntities, BlockStyles) {
-  var content = '', blockEntities = {}, blockEntityRanges = [], blockInlineStyleRanges = [];
+  let content = '', blockEntities = {}, blockEntityRanges = [], blockInlineStyleRanges = [];
   inlineItem.children.forEach(function (child) {
     if (child.type === 'text') {
       content += child.content;
@@ -133,8 +133,7 @@ function parseInline(inlineItem, BlockEntities, BlockStyles) {
     } else if (child.type === 'hardbreak') {
       content += '\n';
     } else if (BlockStyles[child.type]) {
-      var key = generateUniqueKey();
-      var styleBlock = {
+      const styleBlock = {
         offset: strlen(content) || 0,
         length: 0,
         style: BlockStyles[child.type]
@@ -148,7 +147,7 @@ function parseInline(inlineItem, BlockEntities, BlockStyles) {
 
       blockInlineStyleRanges.push(styleBlock);
     } else if (BlockEntities[child.type]) {
-      var key = generateUniqueKey();
+      const key = generateUniqueKey();
 
       blockEntities[key] = BlockEntities[child.type](child);
 
@@ -160,7 +159,7 @@ function parseInline(inlineItem, BlockEntities, BlockStyles) {
     } else if (child.type.indexOf('_close') !== -1 && BlockEntities[child.type.replace('_close', '_open')]) {
       blockEntityRanges[blockEntityRanges.length - 1].length = strlen(content) - blockEntityRanges[blockEntityRanges.length - 1].offset;
     } else if (child.type.indexOf('_close') !== -1 && BlockStyles[child.type.replace('_close', '_open')]) {
-      var type = BlockStyles[child.type.replace('_close', '_open')]
+      const type = BlockStyles[child.type.replace('_close', '_open')]
       blockInlineStyleRanges = blockInlineStyleRanges
         .map(style => {
           if (style.length === 0 && style.style === type) {
@@ -170,6 +169,24 @@ function parseInline(inlineItem, BlockEntities, BlockStyles) {
         });
     }
   });
+
+  return {content, blockEntities, blockEntityRanges, blockInlineStyleRanges};
+}
+
+// doesnt handle inline styles
+function parseAtomic(atomicItem, BlockEntities,) {
+  let content = ' ', blockEntities = {}, blockEntityRanges = [], blockInlineStyleRanges = [];
+  const {type} = atomicItem
+
+   if (BlockEntities[type]) {
+      var key = generateUniqueKey();
+      blockEntities[key] = BlockEntities[type](atomicItem);
+      blockEntityRanges.push({
+        offset: 0,
+        length: 1,
+        key: key
+      });
+    }
 
   return {content, blockEntities, blockEntityRanges, blockInlineStyleRanges};
 }
@@ -219,11 +236,11 @@ function markdownToDraft(string, options = {}) {
     });
   }
 
-  var blocks = []; // blocks will be returned as part of the final draftjs raw object
-  var entityMap = {}; // entitymap will be returned as part of the final draftjs raw object
-  var parsedData = md.parse(string, {}); // remarkable js takes markdown and makes it an array of style objects for us to easily parse
-  var currentListType = null; // Because of how remarkable's data is formatted, we need to cache what kind of list we're currently dealing with
-  var previousBlockEndingLine = 1;
+  let blocks = []; // blocks will be returned as part of the final draftjs raw object
+  let entityMap = {}; // entitymap will be returned as part of the final draftjs raw object
+  let parsedData = md.parse(string, {}); // remarkable js takes markdown and makes it an array of style objects for us to easily parse
+  let currentListType = null; // Because of how remarkable's data is formatted, we need to cache what kind of list we're currently dealing with
+  let previousBlockEndingLine = 1;
 
   // Allow user to define custom BlockTypes and Entities if they so wish
   const BlockTypes = Object.assign({}, DefaultBlockTypes, options.blockTypes || {});
@@ -238,7 +255,7 @@ function markdownToDraft(string, options = {}) {
       currentListType = 'ordered_list_item_open';
     }
 
-    var itemType = item.type;
+    let itemType = item.type;
     if (itemType === 'list_item_open') {
       itemType = currentListType;
     }
@@ -246,8 +263,8 @@ function markdownToDraft(string, options = {}) {
     if (itemType === 'inline') {
       // Parse inline content and apply it to the most recently created block level item,
       // which is where the inline content will belong.
-      var {content, blockEntities, blockEntityRanges, blockInlineStyleRanges} = parseInline(item, BlockEntities, BlockStyles);
-      var blockToModify = blocks[blocks.length - 1];
+      const { content, blockEntities, blockEntityRanges, blockInlineStyleRanges } = parseInline(item, BlockEntities, BlockStyles);
+      const blockToModify = blocks[blocks.length - 1];
       blockToModify.text = content;
       blockToModify.inlineStyleRanges = blockInlineStyleRanges;
       blockToModify.entityRanges = blockEntityRanges;
@@ -255,8 +272,8 @@ function markdownToDraft(string, options = {}) {
       // The entity map is a master object separate from the block so just add any entities created for this block to the master object
       Object.assign(entityMap, blockEntities);
     } else if ((itemType.indexOf('_open') !== -1 || itemType === 'fence' || itemType === 'hr') && BlockTypes[itemType]) {
-      var depth = 0;
-      var block;
+      let depth = 0;
+      let block;
 
       if (item.level > 0) {
         depth = Math.floor(item.level / 2);
@@ -282,7 +299,7 @@ function markdownToDraft(string, options = {}) {
         // an appropriate number of extra paragraphs to re-create those newlines in draftjs.
         // This is probably my least favourite thing in this file, but not sure what could be better.
         if (previousBlockEndingLine) {
-          var totalEmptyParagraphsToCreate = item.lines[0] - previousBlockEndingLine;
+          const totalEmptyParagraphsToCreate = item.lines[0] - previousBlockEndingLine;
           for (var i = 0; i < totalEmptyParagraphsToCreate; i++) {
             blocks.push(DefaultBlockTypes.paragraph_open());
           }
@@ -292,6 +309,18 @@ function markdownToDraft(string, options = {}) {
       if (block) {
         previousBlockEndingLine = item.lines[1] + 1;
         blocks.push(block);
+      }
+
+      // parse warning_open type
+      if (itemType === 'warning_open') {
+        const { content, blockEntities, blockEntityRanges } = parseAtomic(item, BlockEntities);
+        const blockToModify = blocks[blocks.length - 1];
+        blockToModify.text = content;
+        blockToModify.inlineStyleRanges = [];
+        blockToModify.entityRanges = blockEntityRanges;
+
+        // The entity map is a master object separate from the block so just add any entities created for this block to the master object
+        Object.assign(entityMap, blockEntities);
       }
     }
 
