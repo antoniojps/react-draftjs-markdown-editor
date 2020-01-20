@@ -12,9 +12,6 @@ import toolbarOptions from "./toolbarOptions";
 
 const blockRenderFunc = contentBlock => {
   if (contentBlock.getType() !== "atomic") return null;
-
-  const entityId = contentBlock.getEntityAt(0);
-
   return {
     component: AtomicBlock,
     editable: false
