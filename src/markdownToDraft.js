@@ -311,8 +311,9 @@ function markdownToDraft(string, options = {}) {
         blocks.push(block);
       }
 
-      // parse warning_open type
-      if (itemType === 'warning_open') {
+      // blockEntities key must match itemType
+      // parse new types
+      if (Object.keys(options.blockEntities).includes(itemType)) {
         const { content, blockEntities, blockEntityRanges } = parseAtomic(item, BlockEntities);
         const blockToModify = blocks[blocks.length - 1];
         blockToModify.text = content;

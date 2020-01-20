@@ -5,7 +5,8 @@ import RichTextEditor from "./RichTextEditor";
 import { EditorState, convertToRaw, convertFromRaw, CharacterMetadata,  ContentBlock, genKey, } from "draft-js";
 import { draftToMarkdown } from "markdown-draft-js";
 import markdownToDraft from './../markdownToDraft'
-import remarkablePlugin from "./remarkablePlugin";
+import warningPlugin from "./remarkable/warningPlugin";
+import carouselPlugin from "./remarkable/carouselPlugin";
 
 const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -13,9 +14,15 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
   // convert markdown to EditorState
   useEffect(() => {
     const rawDraftObj = markdownToDraft(initialMarkdown, {
-      remarkablePlugins: [remarkablePlugin],
+      remarkablePlugins: [carouselPlugin, warningPlugin,],
       blockTypes: {
         warning_open: function (item) {
+          return {
+            type: 'atomic',
+            text: ' ',
+          }
+        },
+        carousel_open: function (item) {
           return {
             type: 'atomic',
             text: ' ',
@@ -29,7 +36,13 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
             mutability: 'IMMUTABLE',
             data: item.data
           }
-        }
+        },
+        carousel_open: function (item) {
+          return  {
+            type: 'CAROUSEL',
+            mutability: 'IMMUTABLE',
+          }
+        },
       }
     });
     const newContentState = convertFromRaw(rawDraftObj);
@@ -53,6 +66,17 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
 <warning>
   ${entity.data}
 </warning>`;
+          }
+        },
+        CAROUSEL: {
+          open: function (entity) {
+            return ``;
+          },
+          close: function (entity) {
+            return `
+<carousel>
+  ![Image](https://www.ua.pt/contents/imgs/spaces/espacos_cantina_crasto_3.jpg)
+</carousel>`;
           }
         }
       }

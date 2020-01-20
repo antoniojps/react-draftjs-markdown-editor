@@ -42,15 +42,22 @@ export const ToolbarOption = ({ onChange, editorState, initialValues }) => {
     toggle();
   };
 
-  const addBlock = () => {
+  const addWarning = () => {
     toggle();
     insertBlock(editorState, onChange, { type: 'WARNING', data: value })
+  };
+
+  const addCarousel = () => {
+    insertBlock(editorState, onChange, { type: 'CAROUSEL' })
   };
 
   return (
     <>
       <div className="rdw-list-wrapper">
         <button onClick={handleClick}>Add Warning</button>
+      </div>
+      <div className="rdw-list-wrapper">
+        <button onClick={addCarousel}>Add Carousel</button>
       </div>
       {isOpen && (
         <Modal ref={ref}>
@@ -59,7 +66,7 @@ export const ToolbarOption = ({ onChange, editorState, initialValues }) => {
             value={value}
             onChange={event => setValue(event.target.value)}
           />
-          <button onClick={addBlock}>Add</button>
+          <button onClick={addWarning}>Add</button>
         </Modal>
       )}
     </>

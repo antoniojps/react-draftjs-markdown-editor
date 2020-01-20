@@ -3,11 +3,6 @@ import "./styles.css";
 import RichTextEditorFromMarkdown from "./RichTextEditor/RichTextEditorFromMarkdown";
 
 const defaultMarkdown = `
-# Hello world
-<warning>
-# Warning title
-This is a warning
-</warning>
 `
 
 export default function App() {
