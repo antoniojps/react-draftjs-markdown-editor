@@ -70,15 +70,15 @@ export const parser = (state, startLine, endLine, silent) => {
     type: TOKENS.WARNING_OPEN,
     level: state.level,
     lines,
-    props: {
-      children: insideText
-    },
+    data: insideText
   });
+  // whether you wish to allow other blocks to be nested in your content or not.
+  // HACK: removed to simplify markdown to draft conversion
   // state.parser.tokenize(state, startLine + 1, nextLine);
-  // state.tokens.push({
-  //   type: TOKENS.WARNING_CLOSE,
-  //   level: state.level
-  // });
+  state.tokens.push({
+    type: TOKENS.WARNING_CLOSE,
+    level: state.level
+  });
 
   // Revert
   lines[1] = nextLine;
