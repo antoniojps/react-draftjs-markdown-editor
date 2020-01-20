@@ -318,7 +318,6 @@ function markdownToDraft(string, options = {}) {
         blockToModify.text = content;
         blockToModify.inlineStyleRanges = [];
         blockToModify.entityRanges = blockEntityRanges;
-
         // The entity map is a master object separate from the block so just add any entities created for this block to the master object
         Object.assign(entityMap, blockEntities);
       }

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const Warning = props => (
   <div
-    style={{ padding: "1rem", backgroundColor: "red" }}
+    style={{ padding: "15px", backgroundColor: "red", color: "white", borderRadius: "15px" }}
   >
     {props.children}
   </div>

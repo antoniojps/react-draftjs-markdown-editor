@@ -77,7 +77,7 @@ export const parser = (state, startLine, endLine, silent) => {
   // state.parser.tokenize(state, startLine + 1, nextLine);
   state.tokens.push({
     type: TOKENS.WARNING_CLOSE,
-    level: state.level
+    level: state.level,
   });
 
   // Revert
@@ -95,7 +95,7 @@ export const parser = (state, startLine, endLine, silent) => {
  */
 export function openRenderer(opts) {
   return (tokens, idx, options, env) =>
-    '<div style="background-color: red; padding: 1rem; border-radius: 1rem; color: white;">';
+    '<div style="background-color: red; padding: 1rem; border-radius: 15px; color: white;">';
 }
 
 /**

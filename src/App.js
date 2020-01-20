@@ -4,8 +4,10 @@ import RichTextEditorFromMarkdown from "./RichTextEditor/RichTextEditorFromMarkd
 
 const defaultMarkdown = `
 # Hello world
-
-how **you** doing?
+<warning>
+# Warning title
+This is a warning
+</warning>
 `
 
 export default function App() {
@@ -28,14 +30,16 @@ export default function App() {
         initialMarkdown={initialMarkdown}
         onEditorStateChange={handleChange}
       />
-      <h1>Markdown</h1>
-      <button onClick={handleMarkdownLoad} className="btn btn-default" style={{ marginBottom: "15px"}}>
-        Convert markdown to draft
-      </button>
-      <textarea
-        onChange={event => setMarkdown(event.target.value)}
-        value={markdown}
-      />
+      <div className="wrapper">
+        <h1>Markdown</h1>
+        <button onClick={handleMarkdownLoad} className="btn btn-default" style={{ marginBottom: "15px"}}>
+          Convert markdown to draft
+        </button>
+        <textarea
+          onChange={event => setMarkdown(event.target.value)}
+          value={markdown}
+        />
+      </div>
     </div>
   );
 }
