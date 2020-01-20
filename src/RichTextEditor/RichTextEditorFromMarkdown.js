@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import RichTextEditor from "./RichTextEditor";
 import { EditorState, convertToRaw, convertFromRaw, CharacterMetadata,  ContentBlock, genKey, } from "draft-js";
-import { List, Map, Repeat } from 'immutable'
-import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
+import { draftToMarkdown } from "markdown-draft-js";
+import markdownToDraft from './../markdownToDraft'
 import remarkablePlugin from "./remarkablePlugin";
 
 const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
@@ -16,6 +16,7 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
       remarkablePlugins: [remarkablePlugin],
       blockTypes: {
         warning_open: function (item) {
+          console.log('blocktype warning item', item)
           return {
             type: 'atomic',
             data: {

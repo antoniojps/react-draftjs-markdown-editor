@@ -6,7 +6,6 @@
   "main": "src/index.js",
   "dependencies": {
     "draft-js": "0.11.4",
-    "immutable": "^4.0.0-rc.12",
     "markdown-draft-js": "2.1.1",
     "prop-types": "15.7.2",
     "react": "16.12.0",
@@ -14,6 +13,7 @@
     "react-draft-wysiwyg": "1.14.4",
     "react-scripts": "3.0.1",
     "react-use": "13.18.0",
+    "remarkable": "2.0.0",
     "styled-components": "5.0.0"
   },
   "devDependencies": {

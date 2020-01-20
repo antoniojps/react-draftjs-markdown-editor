@@ -16,10 +16,11 @@ export default function App() {
     setMarkdown(newMarkdown);
   };
 
-  const handleMarkdownLoad = (markdownToLoad) => {
-    setInitialMarkdown(markdownToLoad)
+  const handleMarkdownLoad = () => {
+    setInitialMarkdown(markdown)
   }
 
+  console.log({initialMarkdown})
   return (
     <div className="App">
       <h1>RichTextEditor</h1>
