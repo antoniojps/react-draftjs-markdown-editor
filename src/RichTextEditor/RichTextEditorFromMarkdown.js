@@ -16,17 +16,21 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
       remarkablePlugins: [remarkablePlugin],
       blockTypes: {
         warning_open: function (item) {
-          console.log('blocktype warning item', item)
           return {
             type: 'atomic',
-            data: {
-              type: 'WARNING',
-              props: item.props
-            },
             text: ' ',
           }
         }
       },
+      blockEntities: {
+        warning_open: function (item) {
+          return  {
+            type: 'WARNING',
+            mutability: 'IMMUTABLE',
+            data: item.data
+          }
+        }
+      }
     });
     const newContentState = convertFromRaw(rawDraftObj);
     const newEditorState = EditorState.createWithContent(newContentState);
@@ -41,7 +45,7 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
     const markdownFromEditorState = draftToMarkdown(rawDraftObj, {
       entityItems: {
         WARNING: {
-          open: function(entity) {
+          open: function (entity) {
             return ``;
           },
           close: function(entity) {
