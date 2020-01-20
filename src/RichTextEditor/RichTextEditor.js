@@ -23,7 +23,7 @@ const blockRenderFunc = contentBlock => {
 
 const RichTextEditor = ({ editorState, onEditorStateChange }) => {
   useEffect(() => {
-    console.log('converted', convertToRaw(editorState.getCurrentContent()))
+    console.log('draftjs raw object', convertToRaw(editorState.getCurrentContent()))
   }, [editorState])
   return (
     <Editor

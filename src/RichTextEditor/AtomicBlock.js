@@ -10,12 +10,15 @@ const Warning = props => (
 );
 
 const AtomicBlock = ({ block, contentState }) => {
-  const data = block.getData().toJS()
-  const {type, props}= data
+  // get block entity data
+  const entity = contentState.getEntity(block.getEntityAt(0));
+  const data = entity.getData();
+  const type = entity.getType();
 
+  // render appropriate component based on atomic block entity type
   switch (type) {
     case "WARNING":
-      return <Warning {...props} />;
+      return <Warning>{data}</Warning>;
     default:
       return "Invalid AtomicBlock type";
   }

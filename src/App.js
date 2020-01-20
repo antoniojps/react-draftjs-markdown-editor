@@ -28,7 +28,7 @@ export default function App() {
         onEditorStateChange={handleChange}
       />
       <h1>Markdown</h1>
-      <button onClick={() => setInitialMarkdown(markdown)} className="btn btn-default" style={{ marginBottom: "15px"}}>
+      <button onClick={handleMarkdownLoad} className="btn btn-default" style={{ marginBottom: "15px"}}>
         Convert markdown to draft
       </button>
       <textarea
