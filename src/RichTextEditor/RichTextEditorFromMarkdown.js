@@ -7,6 +7,7 @@ import { draftToMarkdown } from "markdown-draft-js";
 import markdownToDraft from './../markdownToDraft'
 import warningPlugin from "./remarkable/warningPlugin";
 import carouselPlugin from "./remarkable/carouselPlugin";
+import imagePlugin from "./remarkable/imagePlugin";
 
 const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -14,7 +15,7 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
   // convert markdown to EditorState
   useEffect(() => {
     const rawDraftObj = markdownToDraft(initialMarkdown, {
-      remarkablePlugins: [carouselPlugin, warningPlugin,],
+      remarkablePlugins: [carouselPlugin, warningPlugin, imagePlugin],
       blockTypes: {
         warning_open: function (item) {
           return {
@@ -27,7 +28,13 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
             type: 'atomic',
             text: ' ',
           }
-        }
+        },
+        image_open: function (item) {
+          return {
+            type: 'atomic',
+            text: ' ',
+          }
+        },
       },
       blockEntities: {
         warning_open: function (item) {
@@ -41,6 +48,13 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
           return  {
             type: 'CAROUSEL',
             mutability: 'IMMUTABLE',
+          }
+        },
+        image_open: function (item) {
+          return {
+            type: 'IMAGE',
+            mutability: 'IMMUTABLE',
+            data: item
           }
         },
       }
@@ -77,6 +91,14 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
 <carousel>
   ![Image](https://www.ua.pt/contents/imgs/spaces/espacos_cantina_crasto_3.jpg)
 </carousel>`;
+          }
+        },
+        IMAGE: {
+          open: function (entity) {
+            return '';
+          },
+          close: function (entity) {
+            return `![](${entity.data.src})`;
           }
         }
       }

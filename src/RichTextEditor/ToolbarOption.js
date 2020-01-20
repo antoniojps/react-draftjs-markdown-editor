@@ -51,6 +51,10 @@ export const ToolbarOption = ({ onChange, editorState, initialValues }) => {
     insertBlock(editorState, onChange, { type: 'CAROUSEL' })
   };
 
+  const addImage = () => {
+    insertBlock(editorState, onChange, { type: 'IMAGE', data: {src: "https://i.imgur.com/AbL5Ivo.jpg"}  })
+  };
+
   return (
     <>
       <div className="rdw-list-wrapper">
@@ -58,6 +62,9 @@ export const ToolbarOption = ({ onChange, editorState, initialValues }) => {
       </div>
       <div className="rdw-list-wrapper">
         <button onClick={addCarousel}>Add Carousel</button>
+      </div>
+      <div className="rdw-list-wrapper">
+        <button onClick={addImage}>Add image</button>
       </div>
       {isOpen && (
         <Modal ref={ref}>

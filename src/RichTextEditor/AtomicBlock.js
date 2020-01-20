@@ -26,6 +26,8 @@ const AtomicBlock = ({ block, contentState }) => {
 
   // render appropriate component based on atomic block entity type
   switch (type) {
+    case "IMAGE":
+      return <img className="img" src={data.src} alt={data.alt} />;
     case "WARNING":
       return <Warning>{data}</Warning>;
     case "CAROUSEL":
