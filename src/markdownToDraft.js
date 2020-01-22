@@ -242,6 +242,8 @@ function markdownToDraft(string, options = {}) {
   let currentListType = null; // Because of how remarkable's data is formatted, we need to cache what kind of list we're currently dealing with
   let previousBlockEndingLine = 1;
 
+  console.log({parsedData})
+
   // Allow user to define custom BlockTypes and Entities if they so wish
   const BlockTypes = Object.assign({}, DefaultBlockTypes, options.blockTypes || {});
   const BlockEntities = Object.assign({}, DefaultBlockEntities, options.blockEntities || {});

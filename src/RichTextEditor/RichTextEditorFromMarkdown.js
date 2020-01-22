@@ -8,6 +8,7 @@ import markdownToDraft from './../markdownToDraft'
 import warningPlugin from "./remarkable/warningPlugin";
 import carouselPlugin from "./remarkable/carouselPlugin";
 import imagePlugin from "./remarkable/imagePlugin";
+import videoPlugin from "./remarkable/videoPlugin";
 
 const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -15,7 +16,7 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
   // convert markdown to EditorState
   useEffect(() => {
     const rawDraftObj = markdownToDraft(initialMarkdown, {
-      remarkablePlugins: [carouselPlugin, warningPlugin, imagePlugin],
+      remarkablePlugins: [carouselPlugin, warningPlugin, imagePlugin, videoPlugin],
       blockTypes: {
         warning_open: function (item) {
           return {
@@ -30,6 +31,12 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
           }
         },
         image_open: function (item) {
+          return {
+            type: 'atomic',
+            text: ' ',
+          }
+        },
+        video_open: function (item) {
           return {
             type: 'atomic',
             text: ' ',
@@ -53,6 +60,13 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
         image_open: function (item) {
           return {
             type: 'IMAGE',
+            mutability: 'IMMUTABLE',
+            data: item
+          }
+        },
+        video_open: function (item) {
+          return  {
+            type: 'VIDEO',
             mutability: 'IMMUTABLE',
             data: item
           }
@@ -99,6 +113,14 @@ const RichTextEditorMarkdown = ({ initialMarkdown, onEditorStateChange }) => {
           },
           close: function (entity) {
             return `![](${entity.data.src})`;
+          }
+        },
+        VIDEO: {
+          open: function (entity) {
+            return '';
+          },
+          close: function (entity) {
+            return `<video url="${entity.data.url}" />`;
           }
         }
       }

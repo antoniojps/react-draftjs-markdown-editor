@@ -55,6 +55,10 @@ export const ToolbarOption = ({ onChange, editorState, initialValues }) => {
     insertBlock(editorState, onChange, { type: 'IMAGE', data: {src: "https://i.imgur.com/AbL5Ivo.jpg"}  })
   };
 
+  const addVideo = () => {
+    insertBlock(editorState, onChange, { type: 'VIDEO', data: {url: "https://youtu.be/xtJTXa58rY8"}  })
+  };
+
   return (
     <>
       <div className="rdw-list-wrapper">
@@ -65,6 +69,9 @@ export const ToolbarOption = ({ onChange, editorState, initialValues }) => {
       </div>
       <div className="rdw-list-wrapper">
         <button onClick={addImage}>Add image</button>
+      </div>
+      <div className="rdw-list-wrapper">
+        <button onClick={addVideo}>Add video</button>
       </div>
       {isOpen && (
         <Modal ref={ref}>

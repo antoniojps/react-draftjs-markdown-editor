@@ -14,8 +14,9 @@
   text-align: center;
 }
 
-textarea {
+textarea, .renderer {
   min-height: 200px;
+  overflow: scroll;
   background-color: white;
   border: 4px solid black;
   padding: 1rem;
